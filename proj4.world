@@ -1,0 +1,53 @@
+include "pioneer.inc"
+include "map.inc"
+include "sick.inc"
+
+# time to pause (in GUI mode) or quit (in headless mode (-g)) the simulation
+quit_time 3600 # 1 hour of simulated time
+
+paused 1
+
+# spatial resolution of the underlying occupancy grid. Default is 0.02m.
+resolution 0.02
+
+# set the multiple of real time that Stage should try to achieve. Default is 1. 
+# set to 0 to go as fast as possible.
+speedup 1 
+
+# configure the GUI window
+window
+(
+  size [ 775.000 684.000 ] # in pixels
+  scale 12.5   # pixels per meter
+  center [ -6  1.5 ]
+  #rotate [ 0  0 ]
+  			
+  show_data 1              # 1=on 0=off
+)
+
+# load an environment bitmap
+floorplan
+( 
+  name "hospital_section"
+  size [40.000 18.000 0.600]
+  bitmap "bitmaps/hospital_section.png"
+)
+
+
+pioneer2dx
+(		  
+  # can refer to the robot by this name
+  name "r0"
+  pose [-10.071 3.186 0 -722.333] 
+
+  # pioneer2dx's sonars	will be ranger:0 and the laser will be ranger:1
+  sicklaser( pose [ 0 0 0 0 ] ) 
+ 
+  # demonstrate a plugin controller, implemented in examples/ctrl/wander.cc
+  # you probably should comment this out when using simple.cfg with Player
+#  ctrl "wander"
+
+  # report error-free position in world coordinates
+  localization "gps"
+  localization_origin [ 0 0 0 0 ]
+)
